@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         registry = "211223789150.dkr.ecr.us-east-1.amazonaws.com/my-docker-repo"
+        registry = "330075814742.dkr.ecr.ap-south-1.amazonaws.com/eks-api-poc"
     }
     
     stages {
@@ -21,15 +22,19 @@ pipeline {
         stage ("Build image") {
             steps {
                 script {
-                    docker.build registry
+                    docker build -t eks-api-poc .
+                    docker tag eks-api-poc:latest 330075814742.dkr.ecr.ap-south-1.amazonaws.com/eks-api-poc:latest
+                    //docker.build registry
                 }
             }
         }
         
         stage ("Push to ECR") {
             steps {
-                sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 211223789150.dkr.ecr.us-east-1.amazonaws.com"
-                sh "docker push 211223789150.dkr.ecr.us-east-1.amazonaws.com/my-docker-repo:latest"
+                sh "aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 330075814742.dkr.ecr.ap-south-1.amazonaws.com"
+                sh "docker push 330075814742.dkr.ecr.ap-south-1.amazonaws.com/eks-api-poc:latest"
+               // sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 211223789150.dkr.ecr.us-east-1.amazonaws.com"
+                //sh "docker push 211223789150.dkr.ecr.us-east-1.amazonaws.com/my-docker-repo:latest"
                 
             }
         }
