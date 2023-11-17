@@ -20,8 +20,8 @@ spec:
         app.kubernetes.io/name: app-2049
     spec:
       containers:
-     # - image: 330075814742.dkr.ecr.ap-south-1.amazonaws.com/eks-api-poc:latest
-      - image: public.ecr.aws/l6m2t8p7/docker-2048:latest 
+      - image: 330075814742.dkr.ecr.ap-south-1.amazonaws.com/eks-api-poc:0.0.6
+     # - image: public.ecr.aws/l6m2t8p7/docker-2048:latest 
         imagePullPolicy: Always
         name: app-2049
         ports:
