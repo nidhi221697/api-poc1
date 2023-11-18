@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        registry = "211223789150.dkr.ecr.us-east-1.amazonaws.com/my-docker-repo"
+        #registry = "211223789150.dkr.ecr.us-east-1.amazonaws.com/my-docker-repo"
         registry = "330075814742.dkr.ecr.ap-south-1.amazonaws.com/eks-api-poc"
     }
     
