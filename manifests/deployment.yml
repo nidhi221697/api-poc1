@@ -20,12 +20,12 @@ spec:
         app.kubernetes.io/name: app-2049
     spec:
       containers:
-      - image: 330075814742.dkr.ecr.ap-south-1.amazonaws.com/eks-api-poc:38
+      - image: 330075814742.dkr.ecr.ap-south-1.amazonaws.com/eks-api-poc:39
      # - image: public.ecr.aws/l6m2t8p7/docker-2048:latest 
         imagePullPolicy: Always
         name: app-2049
         ports:
-        - containerPort: 8085
+        - containerPort: 80
 ---
 apiVersion: v1
 kind: Service
@@ -35,7 +35,7 @@ metadata:
 spec:
   ports:
     - port: 80
-      targetPort: 8085
+      targetPort: 80
       protocol: TCP
   type: NodePort
   selector:
