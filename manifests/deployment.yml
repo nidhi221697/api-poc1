@@ -10,9 +10,6 @@ metadata:
   namespace: game-2049
   name: deployment-2049
 spec:
-  updateStrategy: RollingUpdate
-    maxUnavailable: 1
-    minReadySeconds: 0
   selector:
     matchLabels:
       app.kubernetes.io/name: app-2049
