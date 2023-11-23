@@ -1,0 +1,59 @@
+pipeline {
+    agent any
+    
+    tools {
+        maven "maven8"
+    }
+    environment {
+        registry = "330075814742.dkr.ecr.ap-south-1.amazonaws.com/eks-api-poc"
+        AWS_ACCESS_KEY_ID = credentials('AWS_ACCESS_KEY')
+        AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_KEY')
+        AWS_DEFAULT_REGION = "ap-south-1"
+      //  BUILD_ID = "BUILD_ID"
+    }
+
+    stages {
+        stage('Git Checkout') {
+            steps {
+                echo 'Hello World'
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/nidhi221697/api-poc1.git']])
+            }
+        }
+        stage('Build Jar') {
+            steps {
+                sh "mvn clean install"
+            }
+        }
+        stage('Build Image') {
+            steps {
+                script {
+                    docker.build registry
+                }
+            }
+        }
+        stage('Docker Push') {
+            steps {
+                script {
+                    sh 'aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 330075814742.dkr.ecr.ap-south-1.amazonaws.com'
+                    sh 'docker tag 330075814742.dkr.ecr.ap-south-1.amazonaws.com/eks-api-poc  330075814742.dkr.ecr.ap-south-1.amazonaws.com/eks-api-poc:$BUILD_NUMBER'
+                    sh 'docker push 330075814742.dkr.ecr.ap-south-1.amazonaws.com/eks-api-poc:$BUILD_NUMBER'
+                }
+            }
+        }
+        stage('Deploy on eks') {
+            steps {
+                script {
+                    dir('manifests') {
+                        sh 'aws eks update-kubeconfig --name eks-api-poc'
+                      //  sh 'sed -i 's,TEST_IMAGE_NAME,330075814742.dkr.ecr.ap-south-1.amazonaws.com/eks-api-poc:$BUILD_NUMBER,' deployment.yml'
+                        sh("sed -i.bak 's#330075814742.dkr.ecr.ap-south-1.amazonaws.com/eks-api-poc:#${BUILD_NUMBER}#' deployment.yml")
+                //    withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'eks-api-poc', namespace: '', restrictKubeConfigAccess: false, serverUrl: '') {
+                //   withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'eks-api-poc', namespace: '', restrictKubeConfigAccess: false, serverUrl: '') {
+                        sh 'kubectl apply -f deployment.yml -n game-2049'
+                       // sh 'kubectl create -f deployment.yml -n game-2049'
+} 
+                }
+            }
+        }
+    }
+}
