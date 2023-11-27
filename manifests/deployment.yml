@@ -1,8 +1,8 @@
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: game-2050
+#---
+#apiVersion: v1
+#kind: Namespace
+#metadata:
+#  name: game-2050
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -20,7 +20,7 @@ spec:
         app.kubernetes.io/name: app-2050
     spec:
       containers:
-      - image: 330075814742.dkr.ecr.ap-south-1.amazonaws.com/eks-api-poc:
+      - image: 330075814742.dkr.ecr.ap-south-1.amazonaws.com/eks-api-poc:72
       #TEST_IMAGE_NAME
      # - image: public.ecr.aws/l6m2t8p7/docker-2048:latest 
         imagePullPolicy: Always
