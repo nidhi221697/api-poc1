@@ -24,7 +24,7 @@ spec:
       #TEST_IMAGE_NAME
      # - image: public.ecr.aws/l6m2t8p7/docker-2048:latest 
         imagePullPolicy: Always
-        name: app-2049
+        name: app-2050
         ports:
         - containerPort: 8085
 ---
